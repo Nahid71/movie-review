@@ -13,6 +13,11 @@ class Movie(models.Model):
     class Meta:
         ordering = ['-id']
 
+    def update_avg_rating(self):
+        all_movies =  self.movie.all()
+        self.avg_rating = sum(rating.score for rating in all_movies) / all_movies.count()
+        self.updated_at = self.updated_at
+        self.save()
 
 class Rating(models.Model):
     movie = models.ForeignKey(Movie,related_name='movie',on_delete=models.CASCADE)
