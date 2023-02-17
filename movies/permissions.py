@@ -15,3 +15,27 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Write permissions are only allowed to the creator of the movie
         return obj.creator == request.user
+
+class IsInappropriateOrAuthorOnly(permissions.BasePermission):
+    """
+    Custom permission for hidding movie object if inappropriate and only author can see.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # if request by author then  show the object
+        if obj.creator == request.user:
+            return True
+        # if 'is_inappropriate' is True then hide the object
+        if obj.is_inappropriate:
+            return False
+        return True
+
+        # Write permissions are only allowed to the creator of the movie
+        return obj.creator == request.user
+    
+class IsSuperUser(permissions.BasePermission):
+    """
+    Custom permission to only allow superAdmin access the object.
+    """
+    def has_permission(self, request, view):
+        return request.user and request.user.is_superuser

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
@@ -69,10 +70,11 @@ class LoginSerializer(serializers.Serializer):
         user = validated_data['user']
 
         # Generate a new token for the user
-        token, created = Token.objects.get_or_create(user=user)
+        refresh = RefreshToken.for_user(user)
 
         return {
-            'token': token.key,
+            'refresh_token': str(refresh),
+            'access_token': str(refresh.access_token),
             'user_id': user.id,
             'username': user.username,
             'email': user.email

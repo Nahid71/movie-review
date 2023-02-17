@@ -9,6 +9,7 @@ class Movie(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey('auth.User', related_name='films', on_delete=models.CASCADE)
     avg_rating = models.FloatField(null=True,blank=True)
+    is_inappropriate = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-id']
@@ -23,5 +24,17 @@ class Rating(models.Model):
     movie = models.ForeignKey(Movie,related_name='movie',on_delete=models.CASCADE)
     reviewer = models.ForeignKey('auth.User', related_name='reviewer', on_delete=models.CASCADE)
     score = models.IntegerField()
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Report(models.Model):
+    STATE_CHOICES = (
+        ('unresolved', 'unresolved'),
+        ('resolved', 'resolved'),
+        ('reject', 'rejected'),
+    )
+    movie = models.ForeignKey(Movie,related_name='r_movie',on_delete=models.CASCADE)
+    reporter = models.ForeignKey('auth.User', related_name='repoter', on_delete=models.CASCADE)
+    state = models.CharField(max_length=30, choices=STATE_CHOICES, default="unresolved")
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
