@@ -33,7 +33,7 @@ class RetrieveUpdateDestroyMovieAPIView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (JWTAuthentication,)
 
 
-class ListCreateReviewAPIView(ListCreateAPIView):
+class CreateReviewAPIView(CreateAPIView):
     serializer_class = ReviewSerializer
     queryset = Rating.objects.all()
     permission_classes = (IsAuthenticated,)
@@ -54,7 +54,7 @@ class RetrieveUpdateDestroyMovieAPIView(RetrieveUpdateDestroyAPIView):
 class CreateReportAPIView(CreateAPIView):
     serializer_class = ReportSerializer
     queryset = Report.objects.all()
-    permission_classes = (IsAuthenticated)
+    permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
 
     def perform_create(self, serializer):
@@ -68,7 +68,7 @@ class ListReportAPIView(ListAPIView):
 
 
 class RetrieveUpdateDestroyReportAPIView(RetrieveUpdateDestroyAPIView):
-    serializer_class = MovieSerializer
+    serializer_class = ReportSerializer
     queryset = Report.objects.all()
     permission_classes = (IsAuthenticated, IsSuperUser)
     authentication_classes = (JWTAuthentication,)
